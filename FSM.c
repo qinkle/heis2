@@ -18,6 +18,10 @@ void fsm_init(){
 }
 
 
+
+//  FSM- state behaviour
+
+
 void fsm_order_placed(){
 	switch (STATE) {
 
@@ -32,9 +36,33 @@ void fsm_order_placed(){
 	}
 }
 
+void fsm_stop_button_pressed(){
+
+	queue_clear_all_orders();
+	switch (STATE) {
+
+		case EMERGENCY_AT_FLOOR:
+		break;
+
+		case EMERGENCY_BETWEEN_FLOORS:
+		break;
+
+		
+
+		default:
+		
+	}
+
+}
 
 
 
+
+
+
+
+
+//FSM-utility functions
 
 
 int fsm_check_for_orders(){
