@@ -26,6 +26,6 @@ int main() {
         fsm_order_placed();
       }
     }
-
+    
     return 0;
 }
