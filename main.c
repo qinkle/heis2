@@ -1,5 +1,5 @@
 #include "elev.h"
-//#include "queue.h"
+#include "queue.h"
 //#include "timer.h"
 #include "FSM.h"
 #include <stdio.h>
@@ -17,9 +17,14 @@ int main() {
     while (elev_get_floor_sensor_signal() == -1){}
     elev_set_motor_direction(DIRN_STOP);
     fsm_init();
+    queue_init();
+
+
 
     while (1) {
-      
+      if (fsm_check_for_orders()){
+        fsm_order_placed();
+      }
     }
 
     return 0;
