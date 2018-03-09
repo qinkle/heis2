@@ -24,35 +24,43 @@ void fsm_init(){
 
 void fsm_order_placed(){
 	switch (STATE) {
-
-		case EMERGENCY_AT_FLOOR:
-		break;
-
+		
 		case EMERGENCY_BETWEEN_FLOORS: 
-		break;
+			break;
+		
+		case EMERGENCY_AT_FLOOR:
+			break;
 
 		default:
-		queue_order_made();
+			queue_order_made();
 	}
 }
 
 void fsm_stop_button_pressed(){
 
-	queue_clear_all_orders();
 	switch (STATE) {
-
-		case EMERGENCY_AT_FLOOR:
-		break;
-
+		case ELEVATOR_MOVES:
+			STATE = EMERGENCY_BETWEEN_FLOORS;
+			elev_set_motor_direction(DIRN_STOP);
+		case ELEVATOR_STOPPED:
+			if (elev_get_floor_sensor_signal() != -1){
+				STATE = EMERGENCY_AT_FLOOR;
+				elev_set_door_open_lamp(1);
+			}
+			else {
+				STATE = EMERGENCY_BETWEEN_FLOORS;
+			}
 		case EMERGENCY_BETWEEN_FLOORS:
-		break;
-
+			break;
+		case EMERGENCY_AT_FLOOR:
+			break;
 		
 
 		default:
-		
+			queue_clear_all_orders();
+			elev_set_stop_lamp(1);
+			break;
 	}
-
 }
 
 

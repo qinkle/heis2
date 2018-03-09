@@ -22,10 +22,13 @@ int main() {
 
 
     while (1) {
-      if (fsm_check_for_orders()){
-        fsm_order_placed();
-      }
-    }
+		if (fsm_check_for_orders()){
+			fsm_order_placed();
+		}
+	  
+		if (elev_get_stop_signal()){
+			fsm_stop_button_pressed();
+		}
     
     return 0;
 }
