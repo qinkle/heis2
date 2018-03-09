@@ -29,6 +29,8 @@ int main() {
 		if (elev_get_stop_signal()){
 			fsm_stop_button_pressed();
 		}
-    
+    }
+	
+	
     return 0;
 }
