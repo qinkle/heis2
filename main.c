@@ -6,9 +6,12 @@
 #include <stdio.h>
 
 
-int main(void) {
+int 
+main(void) 
+{
     // Initialize hardware
-    if (!elev_init()) {
+    if (!elev_init()) 
+    {
         printf("Unable to initialize elevator hardware!\n");
         return 1;
     }
@@ -22,31 +25,38 @@ int main(void) {
 
 
     // State machine while-loop, checks for events
-    while (1) {
-		if (fsm_check_for_orders()){
+    while (1) 
+    {
+		if (fsm_check_for_orders())
+        {
 			fsm_order_placed();
 		}
 
-		if (stop_button_pressed()){
+		if (stop_button_pressed())
+        {
 			fsm_stop_button_pressed();
             printf("Registered stop pressed in main \n");
 		}
 
-        if (stop_button_released()){
+        if (stop_button_released())
+        {
             fsm_stop_button_released();
             printf("Registered stop released in main \n");
         }
 
-        if (timer_is_out()){
+        if (timer_is_out())
+        {
             fsm_timer_is_out();
             printf("Timer is out in main\n");
         }
 
-        if (!queue_is_empty()){
+        if (!queue_is_empty())
+        {
             fsm_queue_not_empty();
         }
 
-        if (elev_get_floor_sensor_signal() != -1){
+        if (elev_get_floor_sensor_signal() != -1)
+        {
             fsm_arrive_at_floor();
         }
 
