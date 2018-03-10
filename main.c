@@ -1,11 +1,12 @@
 #include "elev.h"
 #include "queue.h"
-//#include "timer.h"
+#include "timer.h"
 #include "FSM.h"
+#include "stop.h"
 #include <stdio.h>
 
 
-int main() {
+int main(void) {
     // Initialize hardware
     if (!elev_init()) {
         printf("Unable to initialize elevator hardware!\n");
@@ -25,10 +26,27 @@ int main() {
 		if (fsm_check_for_orders()){
 			fsm_order_placed();
 		}
-	  
-		if (elev_get_stop_signal()){
+
+		if (stop_button_pressed()){
 			fsm_stop_button_pressed();
+            printf("Registered stop pressed in main \n");
 		}
+
+        if (stop_button_released()){
+            fsm_stop_button_released();
+            printf("Registered stop released in main \n");
+        }
+
+        if (timer_is_out()){
+            fsm_timer_is_out();
+            printf("Timer is out in main\n");
+        }
+
+        if (!queue_is_empty()){
+            fsm_queue_not_empty();
+        }
+
+
     }
 	
 	

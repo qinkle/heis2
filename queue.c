@@ -1,7 +1,7 @@
 #include "FSM.h"
 #include "queue.h"
 #include "elev.h"
-//#include "timer.h"
+#include "timer.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -20,9 +20,12 @@
 			fourth		0	0		0
 */
 static int order_matrix[N_BUTTONS][N_FLOORS];
+static int direction = 1;	// is 1 if the elevator is moving upwards, and -1 if the elevetor is moving downwards into the depths of despair
+static int last_floor = -1;
 
-void queue_init(){
+void queue_init(void){
 	queue_clear_all_orders();
+	queue_update_floor();
 }
 
 void queue_clear_order(int button, int floor){
@@ -40,7 +43,7 @@ void queue_place_order(int button, int floor){
 	}
 }
 
-void queue_clear_all_orders(){
+void queue_clear_all_orders(void){
 	for (int button = 0; button < N_BUTTONS; button++ ){
 		for (int floor = 0; floor < N_FLOORS; floor++){
 			queue_clear_order( button, floor);
@@ -48,7 +51,7 @@ void queue_clear_all_orders(){
 	}
 }
 
-void queue_order_made(){
+void queue_order_made(void){
 	for (int button = 0; button < N_BUTTONS; button++){
 		for (int floor = 0; floor < N_FLOORS; floor++){
 			if ( !( (floor == 0 && button == BUTTON_CALL_DOWN) ||  (floor == N_FLOORS -1 && button == BUTTON_CALL_UP) ) ){
@@ -58,4 +61,60 @@ void queue_order_made(){
 			}
 		}
 	}
+}
+
+void queue_update_floor(void){
+	if (elev_get_floor_sensor_signal() != -1){
+		last_floor = elev_get_floor_sensor_signal();
+		elev_set_floor_indicator(last_floor);
+	}
+}
+
+
+
+int queue_is_empty(void){
+	for (int button = 0; button < N_BUTTONS; button++){
+		for (int floor = 0; floor < N_FLOORS; floor++){
+			if (order_matrix[button][floor]){
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+
+int queue_get_direction(void){
+	if (queue_is_empty()){
+		return 0;
+	}
+
+	if (queue_is_last_stop()){
+		direction = -direction;
+	}
+
+	return direction;
+}
+
+int queue_is_last_stop(void){
+
+
+	if ((last_floor == 0) || (last_floor == N_FLOORS -1)){
+		return 1;
+	}
+
+	for (int floor = last_floor + direction; floor < N_FLOORS ; floor = floor + direction){
+	
+		for (int button = 0; button < N_BUTTONS; button++){
+	
+			if (order_matrix[button][floor]){
+	
+				return 0;
+	
+			}
+	
+		}
+	}
+
+	return 1;
+
 }
