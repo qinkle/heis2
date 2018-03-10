@@ -33,7 +33,6 @@ void queue_clear_order(int button, int floor){
 	if ( !( (floor == 0 && button == BUTTON_CALL_DOWN) ||  (floor == N_FLOORS -1 && button == BUTTON_CALL_UP) ) ){
 		elev_set_button_lamp(button, floor, 0);
 	}
-
 }
 
 void queue_place_order(int button, int floor){
@@ -70,10 +69,7 @@ void queue_update_floor(void){
 		last_floor = current_sensor;
 		elev_set_floor_indicator(last_floor);
 	}
-
 }
-
-
 
 int queue_is_empty(void){
 	for (int button = 0; button < N_BUTTONS; button++){
@@ -121,7 +117,6 @@ int queue_is_last_stop(void){
 
 
 	return 1;
-
 }
 
 int queue_stop_here(void){
@@ -145,7 +140,6 @@ int queue_stop_here(void){
 	}
 
 	return 0;
-
 }
 
 int queue_floor_is_ordered(void){

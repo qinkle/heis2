@@ -25,17 +25,14 @@ void fsm_init(void){
 
 void fsm_order_placed(void){
 
-	
-
 	switch (STATE) {
 
-	
 		case EMERGENCY_BETWEEN_FLOORS: 
 			break;
 		case EMERGENCY_AT_FLOOR:
 			break;
-
 		case DOORS_OPEN:
+			queue_order_made();
 			queue_clear_floor();
 			break;
 		default:
