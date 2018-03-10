@@ -46,6 +46,9 @@ int main(void) {
             fsm_queue_not_empty();
         }
 
+        if (elev_get_floor_sensor_signal() != -1){
+            fsm_arrive_at_floor();
+        }
 
     }
 	

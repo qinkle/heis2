@@ -47,3 +47,9 @@ int queue_get_direction(void);
 Returns 1 if there are no stops beyond the elevator, returns 0 if there are
 */
 int queue_is_last_stop(void);
+
+int queue_stop_here(void);
+
+int queue_floor_is_ordered(void);
+
+void queue_clear_floor(void);

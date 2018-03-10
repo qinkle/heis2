@@ -84,6 +84,7 @@ int queue_is_empty(void){
 }
 
 int queue_get_direction(void){
+
 	if (queue_is_empty()){
 		return 0;
 	}
@@ -98,16 +99,14 @@ int queue_get_direction(void){
 int queue_is_last_stop(void){
 
 
-	if ((last_floor == 0) || (last_floor == N_FLOORS -1)){
+	if ( ((last_floor == 0) && (direction == -1)) || ((direction == 1) && (last_floor == N_FLOORS -1)) ){
 		return 1;
 	}
 
-	for (int floor = last_floor + direction; floor < N_FLOORS ; floor = floor + direction){
-	
+	for (int floor = last_floor + direction; (floor < N_FLOORS) && (floor > 0); floor = floor + direction){
+		
 		for (int button = 0; button < N_BUTTONS; button++){
-	
 			if (order_matrix[button][floor]){
-	
 				return 0;
 	
 			}
@@ -115,6 +114,48 @@ int queue_is_last_stop(void){
 		}
 	}
 
+
 	return 1;
 
+}
+
+int queue_stop_here(void){
+	
+	if (queue_is_last_stop()){
+		return 1;
+	}
+
+	if (direction == 1){
+		if (order_matrix[0][last_floor] || order_matrix[2][last_floor]){
+			return 1;
+		}
+	}
+
+	if(direction == -1){
+		for (int button = 1; button < N_BUTTONS; button++){
+			if (order_matrix[button][last_floor]){
+				return 1;
+			}
+		}
+	}
+
+	return 0;
+
+}
+
+int queue_floor_is_ordered(void){
+
+	for (int button = 0; button < N_BUTTONS; button++){
+		if (order_matrix[button][last_floor]){
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+void queue_clear_floor(void){
+	for (int button = 0; button < N_BUTTONS; button++){
+		queue_clear_order(button, last_floor);
+	}
 }

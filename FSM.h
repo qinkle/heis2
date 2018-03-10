@@ -32,6 +32,13 @@ State behaviour for unanswered orders
 void fsm_queue_not_empty(void);
 
 /*
+State behaviour for arriving at a floor
+*/
+void fsm_arrive_at_floor(void);
+
+/*
 Polls all order buttons, returns 1 if one is pressed
 */
 int fsm_check_for_orders(void);
+
+
