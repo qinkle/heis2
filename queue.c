@@ -64,10 +64,13 @@ void queue_order_made(void){
 }
 
 void queue_update_floor(void){
-	if (elev_get_floor_sensor_signal() != -1){
-		last_floor = elev_get_floor_sensor_signal();
+	int current_sensor = elev_get_floor_sensor_signal();
+
+	if ( (elev_get_floor_sensor_signal() != -1) && (elev_get_floor_sensor_signal()!= last_floor) ){
+		last_floor = current_sensor;
 		elev_set_floor_indicator(last_floor);
 	}
+
 }
 
 
@@ -103,12 +106,14 @@ int queue_is_last_stop(void){
 		return 1;
 	}
 
-	for (int floor = last_floor + direction; (floor < N_FLOORS) && (floor > 0); floor = floor + direction){
+	for (int floor = last_floor + direction; ((floor < N_FLOORS) && (floor >= 0)); floor = floor + direction){
 		
 		for (int button = 0; button < N_BUTTONS; button++){
+			
 			if (order_matrix[button][floor]){
+
 				return 0;
-	
+			
 			}
 	
 		}

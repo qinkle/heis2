@@ -25,14 +25,19 @@ void fsm_init(void){
 
 void fsm_order_placed(void){
 
+	
+
 	switch (STATE) {
-		
+
+	
 		case EMERGENCY_BETWEEN_FLOORS: 
 			break;
-		
 		case EMERGENCY_AT_FLOOR:
 			break;
 
+		case DOORS_OPEN:
+			queue_clear_floor();
+			break;
 		default:
 			queue_order_made();
 			break;
@@ -139,7 +144,7 @@ void fsm_timer_is_out(void){
 
 		case DOORS_OPEN:
 			printf("timer_is_out does\n");
-			printf("From DOORS_OPEN		 			to ELEVATOR_STOPPED\n");
+			printf("From DOORS_OPEN		 		to ELEVATOR_STOPPED\n");
 			timer_stop();
 			elev_set_door_open_lamp(0);
 			STATE = ELEVATOR_STOPPED;
@@ -159,7 +164,7 @@ void fsm_queue_not_empty(void){
 			break;
 
 		case ELEVATOR_STOPPED:
-			if (queue_floor_is_ordered()){
+			if (queue_floor_is_ordered() && (elev_get_floor_sensor_signal() != -1)){
 				timer_start();
 				elev_set_door_open_lamp(1);
 				queue_clear_floor();
@@ -198,7 +203,7 @@ void fsm_arrive_at_floor(void){
 			if (queue_stop_here()){
 				elev_set_motor_direction(0);
 				printf("arrive_at_floor does\n");
-				printf("From ELEVATOR_MOVES		 		to ELEVATOR_STOPPED\n");
+				printf("From ELEVATOR_MOVES		 	to ELEVATOR_STOPPED\n");
 				STATE = ELEVATOR_STOPPED;
 			}
 			break;
