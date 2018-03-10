@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 
-static int stop_button = 0;
+static int stop_button = 0; // Remembers the state of the stop button
 
 
 

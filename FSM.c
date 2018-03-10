@@ -21,8 +21,6 @@ void fsm_init(void){
 
 
 //  FSM- state behaviour
-
-
 void fsm_order_placed(void){
 
 	switch (STATE) {

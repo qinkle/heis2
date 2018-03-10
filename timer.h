@@ -1,7 +1,17 @@
 //Timer header
 
 
+/*
+Starts timer
+*/
+void timer_start(void);
 
-void timer_start(void); // Starts timer
-int timer_is_out(void); // Returns 1 if timer is out
-void timer_stop(void);	// Stops the timer
+/*
+Returns 1 if timer is out
+*/
+int timer_is_out(void);
+
+/*
+Stops the timer
+*/
+void timer_stop(void);

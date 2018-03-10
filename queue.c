@@ -62,11 +62,12 @@ void queue_order_made(void){
 	}
 }
 
+
 void queue_update_floor(void){
-	int current_sensor = elev_get_floor_sensor_signal();
+	int current_floor_sensor = elev_get_floor_sensor_signal();
 
 	if ( (elev_get_floor_sensor_signal() != -1) && (elev_get_floor_sensor_signal()!= last_floor) ){
-		last_floor = current_sensor;
+		last_floor = current_floor_sensor;
 		elev_set_floor_indicator(last_floor);
 	}
 }
@@ -144,7 +145,7 @@ int queue_stop_here(void){
 
 int queue_floor_is_ordered(void){
 
-	for (int button = 0; button < N_BUTTONS; button++){
+	for (int button = 0; button < N_BUTTONS; button++){ // 
 		if (order_matrix[button][last_floor]){
 			return 1;
 		}
@@ -154,7 +155,7 @@ int queue_floor_is_ordered(void){
 }
 
 void queue_clear_floor(void){
-	for (int button = 0; button < N_BUTTONS; button++){
+	for (int button = 0; button < N_BUTTONS; button++){ // Clears every button associated with the current floor
 		queue_clear_order(button, last_floor);
 	}
 }

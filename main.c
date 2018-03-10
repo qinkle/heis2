@@ -13,7 +13,7 @@ int main(void) {
         return 1;
     }
 
-    //Go to defined state without heeding buttons
+    // Go to defined state without heeding buttons
     elev_set_motor_direction(DIRN_UP);
     while (elev_get_floor_sensor_signal() == -1){}
     elev_set_motor_direction(DIRN_STOP);
@@ -21,7 +21,7 @@ int main(void) {
     queue_init();
 
 
-
+    // State machine while-loop, checks for events
     while (1) {
 		if (fsm_check_for_orders()){
 			fsm_order_placed();
