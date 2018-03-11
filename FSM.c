@@ -1,3 +1,7 @@
+// FSM.c
+// These functions provide events and utilities for the Finite State Machine (FSM)
+
+
 #include "elev.h"
 #include "queue.h"
 #include "timer.h"
@@ -5,6 +9,9 @@
 #include <stdio.h>
 
 
+
+
+// Holds current state
 enum FSM_STATE 
 {
     ELEVATOR_MOVES,
@@ -12,7 +19,7 @@ enum FSM_STATE
     EMERGENCY_BETWEEN_FLOORS,
     EMERGENCY_AT_FLOOR,
     DOORS_OPEN,
-} STATE; // Holds curent state
+} STATE;
 
 
 void
@@ -23,7 +30,8 @@ fsm_init(void)
 
 
 
-//  FSM- state behaviour
+// FSM behaviour
+// printf statements are for monitoring the FSM
 void
 fsm_order_placed(void)
 {
@@ -58,37 +66,42 @@ fsm_stop_button_pressed(void)
 			elev_set_motor_direction(DIRN_STOP);
 
 			if (elev_get_floor_sensor_signal() != -1){
-				printf("stop_button_pressed does\n");
-				printf("From ELEVATOR_MOVES				to EMERGENCY_AT_FLOOR\n");
-				STATE = EMERGENCY_AT_FLOOR;
 				elev_set_door_open_lamp(1);
+                STATE = EMERGENCY_AT_FLOOR;
+                
+                printf("stop_button_pressed does\n");
+                printf("From ELEVATOR_MOVES                to EMERGENCY_AT_FLOOR\n");
 			}
 			else{
-				printf("stop_button_pressed does\n");
-				printf("From ELEVATOR_MOVES				to EMERGENCY_BETWEEN_FLOORS\n");
 				STATE = EMERGENCY_BETWEEN_FLOORS;
+                
+                printf("stop_button_pressed does\n");
+                printf("From ELEVATOR_MOVES                to EMERGENCY_BETWEEN_FLOORS\n");
 			}
 			break;
 
 		case ELEVATOR_STOPPED:
 			if (elev_get_floor_sensor_signal() != -1){
-				printf("stop_button_pressed does\n");
-				printf("From ELEVATOR_STOPPED			to EMERGENCY_AT_FLOOR\n");
-				STATE = EMERGENCY_AT_FLOOR;
 				elev_set_door_open_lamp(1);
+                STATE = EMERGENCY_AT_FLOOR;
+                
+                printf("stop_button_pressed does\n");
+                printf("From ELEVATOR_STOPPED            to EMERGENCY_AT_FLOOR\n");
 			}
 			else {
-				printf("stop_button_pressed does\n");
-				printf("From ELEVATOR_STOPPED			to EMERGENCY_BETWEEN_FLOORS\n");
 				STATE = EMERGENCY_BETWEEN_FLOORS;
+                
+                printf("stop_button_pressed does\n");
+                printf("From ELEVATOR_STOPPED            to EMERGENCY_BETWEEN_FLOORS\n");
 			}
 			break;
 
 		case DOORS_OPEN:
-			printf("stop_button_pressed does\n");
-			printf("From DOORS_OPEN		 			to EMERGENCY_AT_FLOOR\n");
 			timer_stop();
 			STATE = EMERGENCY_AT_FLOOR;
+            
+            printf("stop_button_pressed does\n");
+            printf("From DOORS_OPEN                     to EMERGENCY_AT_FLOOR\n");
 			break;
 		
 		default:
@@ -112,16 +125,18 @@ fsm_stop_button_released(void)
 			break;
 
 		case EMERGENCY_BETWEEN_FLOORS:
-			printf("stop_button_released does\n");
-			printf("From EMERGENCY_BETWEEN_FLOORS 	to ELEVATOR_STOPPED\n");
 			STATE = ELEVATOR_STOPPED;
+            
+            printf("stop_button_released does\n");
+            printf("From EMERGENCY_BETWEEN_FLOORS     to ELEVATOR_STOPPED\n");
 			break;
 		
 		case EMERGENCY_AT_FLOOR:
-			printf("stop_button_released does\n");
-			printf("From EMERGENCY_AT_FLOOR		 	to DOORS_OPEN\n");
 			timer_start();
 			STATE = DOORS_OPEN;
+            
+            printf("stop_button_released does\n");
+            printf("From EMERGENCY_AT_FLOOR             to DOORS_OPEN\n");
 			break;
 
 		case DOORS_OPEN:
@@ -153,11 +168,12 @@ fsm_timer_is_out(void)
 			break;
 
 		case DOORS_OPEN:
-			printf("timer_is_out does\n");
-			printf("From DOORS_OPEN		 		to ELEVATOR_STOPPED\n");
 			timer_stop();
 			elev_set_door_open_lamp(0);
 			STATE = ELEVATOR_STOPPED;
+            
+            printf("timer_is_out does\n");
+            printf("From DOORS_OPEN                 to ELEVATOR_STOPPED\n");
 			break;
 
 		default:
@@ -182,16 +198,18 @@ fsm_queue_not_empty(void)
 				timer_start();
 				elev_set_door_open_lamp(1);
 				queue_clear_floor();
-				printf("queue_not_empty does\n");
-				printf("From ELEVATOR_STOPPED			to DOORS_OPEN\n");
 				STATE = DOORS_OPEN;
+                
+                printf("queue_not_empty does\n");
+                printf("From ELEVATOR_STOPPED            to DOORS_OPEN\n");
 			}
 			else
 			{
 				elev_set_motor_direction(queue_get_direction());
-				printf("queue_not_empty does\n");
-				printf("From ELEVATOR_STOPPED			to ELEVATOR_MOVES\n");
 				STATE = ELEVATOR_MOVES;
+                
+                printf("queue_not_empty does\n");
+                printf("From ELEVATOR_STOPPED            to ELEVATOR_MOVES\n");
 			}
 			break;
 
@@ -221,9 +239,10 @@ fsm_arrive_at_floor(void)
 			if (queue_stop_here())
 			{
 				elev_set_motor_direction(0);
-				printf("arrive_at_floor does\n");
-				printf("From ELEVATOR_MOVES		 	to ELEVATOR_STOPPED\n");
 				STATE = ELEVATOR_STOPPED;
+                
+                printf("arrive_at_floor does\n");
+                printf("From ELEVATOR_MOVES             to ELEVATOR_STOPPED\n");
 			}
 			break;
 
@@ -247,10 +266,7 @@ fsm_arrive_at_floor(void)
 
 
 
-
-
-//FSM-utility functions
-
+//FSM-utility function
 
 int 
 fsm_check_for_orders(void)

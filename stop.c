@@ -1,3 +1,7 @@
+// stop.c
+// These functions monitors stop button activity
+
+
 #include "elev.h"
 #include "queue.h"
 #include "timer.h"
@@ -6,8 +10,6 @@
 
 
 static int stop_button = 0; // Remembers the state of the stop button
-
-
 
 
 int 
