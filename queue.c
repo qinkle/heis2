@@ -44,7 +44,7 @@ void
 queue_place_order(int button, int floor)
 {
 	if ( !( (floor == 0 && button == BUTTON_CALL_DOWN) ||  (floor == N_FLOORS -1 && button == BUTTON_CALL_UP) ) )
-	{
+	{ 
 		order_matrix[button][floor] = 1;
 		elev_set_button_lamp(button, floor, 1);
 	}
@@ -64,13 +64,13 @@ queue_clear_all_orders(void)
 
 void 
 queue_order_made(void)
-{
+{ // 
 	for (int button = 0; button < N_BUTTONS; button++)
 	{
 		for (int floor = 0; floor < N_FLOORS; floor++)
 		{
 			if ( !( (floor == 0 && button == BUTTON_CALL_DOWN) ||  (floor == N_FLOORS -1 && button == BUTTON_CALL_UP) ) )
-			{
+			{ // A check to make sure the elev-function isn't asked to find button signals from non-existant buttons
 				if (elev_get_button_signal(button, floor))
 				{
 					queue_place_order(button, floor);
@@ -83,7 +83,7 @@ queue_order_made(void)
 
 void 
 queue_update_floor(void)
-{
+{ // Reads the floor sensor and updates the current floor value
 	int current_floor_sensor = elev_get_floor_sensor_signal();
 
 	if ( (elev_get_floor_sensor_signal() != -1) && (elev_get_floor_sensor_signal()!= current_floor) )
@@ -95,7 +95,7 @@ queue_update_floor(void)
 
 int 
 queue_is_empty(void)
-{
+{ // Iterates though every floor, checks if there are any calls in the queue matrix
 	for (int button = 0; button < N_BUTTONS; button++)
 	{
 		for (int floor = 0; floor < N_FLOORS; floor++)
@@ -114,12 +114,12 @@ queue_get_direction(void)
 {
 
 	if (queue_is_empty())
-	{
+	{ // If the queue is empty, don't move the elevator
 		return 0;
 	}
 
 	if (queue_is_last_stop())
-	{
+	{ // If it's the last stop, turn around
 		direction = -direction;
 	}
 
@@ -131,11 +131,11 @@ queue_is_last_stop(void)
 {
 
 	if ( ((current_floor == 0) && (direction == -1)) || ((direction == 1) && (current_floor == N_FLOORS -1)) )
-	{
+	{ // Checks if the elevator is going up in the top floor or the elevator is going down in the ground floor
 		return 1;
 	}
 	for (int floor = current_floor + direction; ((floor < N_FLOORS) && (floor >= 0)); floor = floor + direction)
-	{
+	{ // Iterates through the floors in the direction the elevator is moving
 		for (int button = 0; button < N_BUTTONS; button++)
 		{
 			if (order_matrix[button][floor])
@@ -153,12 +153,12 @@ int
 queue_stop_here(void)
 {
 	
-	if (queue_is_last_stop())
+	if (queue_is_last_stop()) // The elevator should stop if there are no other stops after this floor
 	{
 		return 1;
 	}
 
-	if (direction == 1)
+	if (direction == 1) // The elevator is going up, checks if there is anyone going up from or to the floor
 	{
 		if (order_matrix[0][current_floor] || order_matrix[2][current_floor])
 		{
@@ -166,7 +166,7 @@ queue_stop_here(void)
 		}
 	}
 
-	if(direction == -1)
+	if(direction == -1) // The elevator is going down, checks if there is anyone going down from or to the floor
 	{
 		for (int button = 1; button < N_BUTTONS; button++)
 		{
@@ -185,7 +185,7 @@ queue_floor_is_ordered(void)
 {
 
 	for (int button = 0; button < N_BUTTONS; button++)
-	{ // 
+	{ // Iterates through the queue orders on current floor, returns 1 if any one of them is ordered
 		if (order_matrix[button][current_floor])
 		{
 			return 1;
