@@ -1,4 +1,4 @@
-// stop header
+// stop.h
 
 /*
 Returns 1 if the stop button is pressed

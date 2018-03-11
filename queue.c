@@ -1,9 +1,14 @@
+// queue.c
+// These functions provide utilities for managing orders
+
+
 #include "FSM.h"
 #include "queue.h"
 #include "elev.h"
 #include "timer.h"
 #include <stdlib.h>
 #include <stdio.h>
+
 
 
 

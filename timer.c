@@ -1,4 +1,6 @@
-//Timer code
+// timer.c
+// These functions controlls the timer for the elevator door
+
 
 #include <stdio.h>
 #include <stdlib.h>

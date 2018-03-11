@@ -1,4 +1,4 @@
-//Timer header
+// timer.h
 
 
 /*
