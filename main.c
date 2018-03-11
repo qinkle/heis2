@@ -28,7 +28,6 @@ main(void)
     elev_set_motor_direction(DIRN_STOP);
     
     // Initialize queue and FSM module
-    
     fsm_init();
     queue_init();
 
