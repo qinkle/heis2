@@ -64,7 +64,7 @@ queue_clear_all_orders(void)
 
 void 
 queue_order_made(void)
-{ // 
+{
 	for (int button = 0; button < N_BUTTONS; button++)
 	{
 		for (int floor = 0; floor < N_FLOORS; floor++)
